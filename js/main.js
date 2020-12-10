@@ -23,7 +23,7 @@ let endpointURL = "https://ajaxclass-1ca34.firebaseio.com/verox/items/.json"
 let endpointOrder = "https://ajaxclass-1ca34.firebaseio.com/verox/orders/.json"
 //Mis vars auxiliares
 let newItem = {}
-let itemsToChart = {}
+let itemsToChart = []
 let allItems = {}
 
 
@@ -73,7 +73,9 @@ $("input, select").change(event => {
   let value = event.target.value
   newItem[property] = value
   console.log(newItem)
+  property === "imageURL" ? $("#image-Product").attr({src:value}): false
 })
+
 
 //Listener de Boton Agregar Nuevo Producto
 $("#add-product").click(() => {
@@ -81,17 +83,15 @@ $("#add-product").click(() => {
   console.log(newItem)
   console.log(endpointURL)
   crudTheJson(endpointURL, newItem, "POST")
- // $("#addProduct").modal("hide")
+  // $("#addProduct").modal("hide")
 })
 
 //Listener de Botones de Filtros
 $("header .btn-group .btn").click(event => {
   let value = $(event.target).data("filter")
   console.log(value)
-  getTheJson(endpointURL,value)
+  getTheJson(endpointURL, value)
 })
-//Listener de Boton Agregar Producto al Carrito
-//Listener de Boton Limpiar Producto del Carrito
 
 //Llenado de Cards en el Main
 const fillDataToCards = (theJson, criteria) => {
@@ -132,38 +132,57 @@ const addBtnDeleteListener = () => {
     crudTheJson(endpointURL, entryKey, "DELETE")
   })
 
+//Falta Listener de Boton Agregar Producto al Carrito*************
   $(".card .btn-add-chart").click(event => {
     let entryKey = $(event.target).data("entry-key")
-    $(".card input").each( function() {
-      let qty = $(this).val()
+    let qty = 2
+    $(".card input").each(function () { //Falta que detecte cantidad individual*******
+      qty = $(this).val()
       console.log(qty)
     })
-    quantity = {quantity: 2}
-    itemsToChart += allItems[entryKey]
-    console.log(itemsToChart)
+    quantity = { quantity: 2 }    
+    fillItemsChart(entryKey,qty)
     fillChartTable(itemsToChart)
   })
 }
 
-//Llenado de Filas en la Tabla del Carrito de Compras
+//Falta creacion de objeto de ItemsToChart**************
+const fillItemsChart = (entryKey,qty) => {
+  console.log(itemsToChart)
+}
 
+//Llenado de Filas en la Tabla del Carrito de Compras
 const fillChartTable = (theJson) => {
- let i = 0;
-  for (key in theJson) {
-    i++
-    let object = theJson[key]
-    let {productName, price} = object
+  theJson.forEach((item, index) => {
+    let product = allItems[item]
+    let {productName,price} = product
     let newRow = `
     <tr>
-      <td>${i}</td>
+      <td>${index+1}</td>
       <td>${productName}</td>
       <td>quantity</td>
       <td>${price}</td>
     </tr>
               `
     $(idOrders).append(newRow)
-  }
+  })
+// Falta Subtotal************
+// Falta Iva************
+// Falta Total************
 }
+
+//Listener de Boton Limpiar Producto del Carrito
+$(".btn-clean-chart").click(event => {
+  $(idOrders).empty()
+  itemsToChart = []
+})
+
+//Falta Listener de Boton Limpiar Producto del Carrito************
+$(".btn-pay").click(event => {
+  console.log("Enviar Orden")
+//crudTheJson(endpointOrder,itemsToChart,"POST")
+})
+
 
 //------------------------------------------------->Instrucciones Iniciales
 getTheJson(endpointURL, "All")

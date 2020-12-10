@@ -1,0 +1,21 @@
+#chargeProduct #id-Active {
+  width: 20px;
+  height: 20px;
+}
+
+#chargeProduct img {
+  width: 200px;
+  height: 200px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+main .card {
+  height: 25vh;
+}
+
+main .card img {
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+/*# sourceMappingURL=style.css.map */

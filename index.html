@@ -13,7 +13,7 @@
 </head>
 <!-- ------------------START--------------------- -->
 <!-- ----------------MODAL CARGA DE NUEVOS PRODUCTOS--------------- -->
-<div class="modal fade" id="chargeProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content border-0 text-success">
             <div class="modal-header">
@@ -30,21 +30,21 @@
                         <div class="flex-grow-1">
                             <div class="form-group mr-2">
                                 <label for="form-Product">Nombre del producto</label>
-                                <input class="form-control border-success mt-2" type="text" placeholder="Nombre">
+                                <input class="form-control border-success mt-2" type="text" placeholder="Nombre" name="productName">
                             </div>
                             <!-- ----------------Image---------------- -->
                             <div class="form-group mr-2">
                                 <label for="form-Product">Imagen</label>
                                 <input class="form-control border-success  mt-2" type="url"
-                                    placeholder="URL de la imagen">
+                                    placeholder="URL de la imagen" name="imageURL">
                             </div>
                         </div>
-                        <img src="https://picsum.photos/id/102/300" alt="" class="m-2 img-thumbnail mx-auto d-block">
+                        <img src="https://picsum.photos/id/102/300" alt="" class="m-2 img-thumbnail mx-auto d-block" id="image-Product">
                     </div>
                     <!-- ----------------Categoria---------------- -->
                     <div class="form-group mt-2">
                         <label for="category">Categoria</label>
-                        <select class="form-control border-success  mt-2" id="category">
+                        <select class="form-control border-success  mt-2" name="category">
                             <option selected disabled>Selecciona la categoria</option>
                             <option value="Fruit">Fruta</option>
                             <option value="Vegetable">Vegetales</option>
@@ -55,7 +55,7 @@
                     <!-- ----------------Unidades---------------- -->
                     <div class="form-group mt-2">
                         <label for="units">Unidades</label>
-                        <select class="form-control border-success  mt-2" id="units">
+                        <select class="form-control border-success  mt-2" name="units">
                             <option selected disabled>Selecciona las unidades</option>
                             <option value="kg">Kilogramos</option>
                             <option value="lt">Litros</option>
@@ -64,19 +64,19 @@
                     </div>
                     <!-- ----------------Nombre---------------- -->
                     <div class="form-group mt-2">
-                        <label for="form-Product">Precio</label>
-                        <input class="form-control border-success  mt-2" type="text" placeholder="Precio $ MXN">
+                        <label for="form-Product">Precio Unitario</label>
+                        <input class="form-control border-succes  mt-2" type="text" name="price" placeholder="Precio $ MXN">
                     </div>
                     <!-- ----------------Status---------------- -->
                     <div class="form-group form-check mt-2 d-flex align-items-center">
-                        <input type="checkbox" class="form-check-input" id="id-Active" value="true">
-                        <label class="form-check-label border-success ml-2" for="id-Active">Disponible</label>
+                        <input type="checkbox" class="form-check-input" name="available" id="star" value="true">
+                        <label class="form-check-label border-success ml-2" for="star">Disponible</label>
                     </div>
                     <!-- ----------FIN FORM-------------- -->
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success">Agregar</button>
+                <button type="button" class="btn btn-outline-success" id="add-product">Agregar</button>
             </div>
         </div>
     </div>
@@ -103,10 +103,10 @@
                             <th scope="col">Precio</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="items-chart">
                         <tr>
                             <td>${i}</td>
-                            <td>${product-name}</td>
+                            <td>${productName}</td>
                             <td>${quantity}</td>
                             <td>${price}</td>
                         </tr>
@@ -132,7 +132,7 @@
     <a class="navbar-brand text-success">Crown Shop</a>
     <!-- Button trigger modal -->
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn btn-outline-success" data-toggle="modal" data-target="#chargeProduct">
+        <button type="button" class="btn btn btn-outline-success" data-toggle="modal" data-target="#addProduct">
             Agregar Producto
         </button>
         <button class="btn btn-success" data-toggle="modal" data-target="#my-chart"><i
@@ -156,11 +156,11 @@
                                 <p class="card-text">Gran variedad grandes categorias</p>
                                 <!-- ----------------CATEGORIAS--------------- -->
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-outline-success">Frutas</button>
-                                    <button type="button" class="btn btn-outline-success">Vegetales</button>
-                                    <button type="button" class="btn btn-outline-success">Carne</button>
-                                    <button type="button" class="btn btn-outline-success">Miscelaneos</button>
-                                    <button type="button" class="btn btn-success">Todo</button>
+                                    <button type="button" class="btn btn-outline-success" data-filter="Fruit">Frutas</button>
+                                    <button type="button" class="btn btn-outline-success" data-filter="Vegetable">Vegetales</button>
+                                    <button type="button" class="btn btn-outline-success" data-filter="Meat">Carne</button>
+                                    <button type="button" class="btn btn-outline-success" data-filter="Miscelaneous">Miscelaneos</button>
+                                    <button type="button" class="btn btn-success" data-filter="All">Todo</button>
                                 </div>
                             </div>
                         </div>
@@ -169,12 +169,12 @@
                 <!-- ------------------------------------------- -->
 
                 <div class="col-12 mt-3">
-                    <main class="card-group">
+                    <main class="card-group d-flex flex-wrap" id="jsonElement">
                         <!-- -----------------CARD------------------- -->
                         <div class="card m-1 d-flex flex-column align-items-center">
                             <img src="https://picsum.photos/id/102/200" class="card-img-top h-100" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title text-success">Producto: ${product-name}</h5>
+                                <h5 class="card-title text-success">${productName}</h5>
                                 <p class="card-text">Precio: ${price}</p>
                                 <div class="input-group mb-3">
                                     <input type="number" name="quantity" min="0" step="1" class="form-control"
@@ -188,7 +188,7 @@
                                                 class="fas fa-cart-plus"></i></button>
                                     </div>
                                 </div>
-                                <button class="btn btn-danger" id="btn-delete"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-danger btn-delete"><i class="fas fa-minus"></i></button>
                             </div>
                         </div>
                         <!-- ------------------------------------------- -->
